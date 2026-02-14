@@ -1,0 +1,46 @@
+package ru.ischade.legacy.UserProfileTest;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
+class User {
+    private final String name;
+    private final int age;
+
+    User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public boolean isValidAge() {
+        return age >= 18 && age <= 60;
+    }
+
+    public boolean hasValidName() {
+        return name != null && !name.trim().isEmpty();
+    }
+}
+
+public class UserProfileTest {
+
+    // Создайте параметризованный тест, который получает тестовые данные из метода provideUsers
+    @ParameterizedTest
+    @MethodSource("provideUsers")
+    void testUserProfile(User user) {
+        Assertions.assertTrue(user.hasValidName(), "Имя не должно быть пустым или иметь значение null");
+        Assertions.assertTrue(user.isValidAge(), "Возвраст должен быть от 18 до 60");
+    }
+
+    private static Stream<User> provideUsers() {
+        return Stream.of(
+                new User("name", 23),
+                new User("name2", 33),
+                new User("nam3", 43)
+        );
+        // Верните тестовые данные:         
+        // несколько пользователей с корректным именем и возврастом       
+    }
+}
